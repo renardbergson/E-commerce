@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,9 +21,9 @@
                 </h1>
             </div>
             <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
+                <li><a th:href="@{/}">Home</a></li>
                 <li><a href="#produtos">Produtos</a></li>
-                <li><a href="admin.html">Meus Pedidos</a></li>
+                <li><a th:href="@{/admin}">Meus Pedidos</a></li>
             </ul>
             <div class="user-actions">
                 <a href="index.html" class="cart-btn" id="cart-btn" title="Carrinho de compras">
@@ -35,18 +35,18 @@
                         <i class="fas fa-user"></i> <span>Perfil</span> <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="dropdown-menu" id="dropdown-menu">
-                        <a href="signin.html" class="dropdown-item">
+                        <a th:href="@{/signin}" class="dropdown-item">
                             <i class="fas fa-sign-in-alt"></i> Fazer Login
                         </a>
-                        <a href="signup.html" class="dropdown-item">
+                        <a th:href="@{/signup}" class="dropdown-item">
                             <i class="fas fa-user-plus"></i> Criar Conta
                         </a>
                         <hr class="dropdown-divider">
-                        <a href="admin.html" class="dropdown-item">
+                        <a th:href="@{/admin}" class="dropdown-item">
                             <i class="fas fa-cogs"></i> Área Administrativa
                         </a>
                         <hr class="dropdown-divider">
-                        <a href="index.html" class="dropdown-item">
+                        <a th:href="@{/logout}" class="dropdown-item">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     </div>
@@ -58,8 +58,8 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-container">
-            <h2>Sua Loja Online Completa</h2>
-            <p>Descubra produtos incríveis com os melhores preços e entrega rápida. Tecnologia e qualidade em um só lugar.</p>
+            <h2 th:text="${title}">Slogan da loja</h2>
+            <p th:text="${description}">Descrição da loja</p>
             <a href="#produtos" class="btn btn-primary">Ver Produtos</a>
         </div>
     </section>
