@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/auth.css">
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="../static/css/styles.css">
+    <link rel="stylesheet" th:href="@{/css/auth.css}" href="../static/css/auth.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}" href="../static/css/admin.css">
 </head>
 <body>
     <!-- Admin Header -->
@@ -44,25 +44,25 @@
             <nav class="admin-nav">
                 <ul class="admin-nav-list">
                     <li class="admin-nav-item">
-                        <a href="admin.html" class="admin-nav-link active" data-section="dashboard">
+                        <a th:href="@{/dashboard}" th:classappend="${adminSection == 'dashboard'} ? ' active' : ''" class="admin-nav-link" data-section="dashboard">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="admin-nav-item">
-                        <a href="admin.html" class="admin-nav-link" data-section="product">
+                        <a th:href="@{/product}" th:classappend="${adminSection == 'product'} ? ' active' : ''" class="admin-nav-link" data-section="product">
                             <i class="fas fa-box"></i>
                             <span>Produtos</span>
                         </a>
                     </li>
                     <li class="admin-nav-item">
-                        <a href="admin.html" class="admin-nav-link" data-section="order">
+                        <a th:href="@{/order}" th:classappend="${adminSection == 'order'} ? ' active' : ''" class="admin-nav-link" data-section="order">
                             <i class="fas fa-shopping-cart"></i>
                             <span>Pedidos</span>
                         </a>
                     </li>
                     <li class="admin-nav-item">
-                        <a href="admin.html" class="admin-nav-link" data-section="user">
+                        <a th:href="@{/user}" th:classappend="${adminSection == 'user'} ? ' active' : ''" class="admin-nav-link" data-section="user">
                             <i class="fas fa-users"></i>
                             <span>Usuários</span>
                         </a>
@@ -73,9 +73,8 @@
 
         <!-- Main Content -->
         <main class="admin-main">
-
             <!-- Dashboard Section -->
-            <section id="dashboard-section" class="admin-section active">
+            <section th:if="${adminSection == 'dashboard'}" id="dashboard-section" class="admin-section">
                 <div class="admin-header-section">
                     <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
                     <p>Visão geral do sistema</p>
@@ -184,43 +183,8 @@
                 </div>
             </section>
 
-            <!-- Produtos Delete Confirmation Section -->
-            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'productDelete'}" -->
-            <section id="delete-confirmation" class="admin-section" style="display:none">
-                <div class="admin-card">
-                    <div class="card-header">
-                        <h3>
-                            <i class="fas fa-exclamation-triangle text-warning"></i>
-                            Excluir Produto
-                        </h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="delete-confirmation">
-                            <div class="warning-icon">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <h2>Confirmar Exclusão</h2>
-                            <p>Tem certeza que deseja excluir o produto:</p>
-                            <h4 class="product-name-highlight">Notebook Dell Inspiron 15</h4>
-                            <p class="warning-text">Esta ação não poderá ser desfeita.</p>
-                        </div>
-                    </div>
-                    <div class="card-footer delete-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
-                        <div class="form-actions" style="gap: 1rem;">
-                            <a href="admin.html" class="btn btn-outline">
-                                <i class="fas fa-times"></i> Cancelar
-                            </a>
-                            <a href="admin.html" class="btn btn-danger">
-                                <i class="fas fa-trash"></i> Excluir
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <!-- Produtos Section -->
-            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'product'}" -->
-            <section id="produtos-section" class="admin-section" style="display:none">
+            <section th:if="${adminSection == 'product'}" id="produtos-section" class="admin-section">
                 <div class="admin-header-section">
                     <h2><i class="fas fa-box"></i> Gestão de Produtos</h2>
                     <a href="admin.html" class="btn btn-primary" id="add-produto-btn">
@@ -357,72 +321,92 @@
                 </div>
             </section>
 
-            <!-- Categorias Section -->
-            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'category'}" -->
-            <section id="categorias-section" class="admin-section" style="display:none">
+            <!-- Pedidos Section -->
+            <section th:if="${adminSection == 'order'}" id="pedidos-section" class="admin-section">
                 <div class="admin-header-section">
-                    <h2><i class="fas fa-tags"></i> Gestão de Categorias</h2>
-                    <button class="btn btn-primary" id="add-categoria-btn">
-                        <i class="fas fa-plus"></i> Adicionar Categoria
-                    </button>
+                    <h2><i class="fas fa-shopping-cart"></i> Gestão de Pedidos</h2>
+                </div>
+
+                <!-- Filters -->
+                <div class="admin-filters">
+                    <div class="filter-group">
+                        <input type="text" id="search-pedidos" placeholder="Buscar por cliente ou pedido..." class="admin-input">
+                        <select id="filter-status-pedido" class="admin-select" onchange="window.location.href = 'admin.html' + (this.value ? '?status=' + encodeURIComponent(this.value) : '')">
+                            <option value="" selected>Todos os Status</option>
+                            <option value="PENDING">Pendente</option>
+                            <option value="CONFIRMED">Confirmado</option>
+                            <option value="PAID">Pago</option>
+                            <option value="SHIPPED">Enviado</option>
+                            <option value="DELIVERED">Entregue</option>
+                            <option value="CANCELLED">Cancelado</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="admin-table-container">
-                    <table class="admin-table" id="categorias-table">
+                    <table class="admin-table" id="pedidos-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nome</th>
-                                <th>Descrição</th>
-                                <th>Produtos</th>
+                                <th>Cliente</th>
+                                <th>Total Itens</th>
+                                <th>Valor Total</th>
+                                <th>Status</th>
+                                <th>Pagamento</th>
+                                <th>Data</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="categorias-tbody">
-                            <!-- Dynamic content -->
+                        <tbody id="pedidos-tbody">
+                            <tr>
+                                <td>125</td>
+                                <td>Maria Santos</td>
+                                <td>3</td>
+                                <td>R$ 450,00</td>
+                                <td>Entregue</td>
+                                <td>Cartão de Crédito</td>
+                                <td>15/03/2025 14:30</td>
+                                <td class="action-buttons">
+                                    <a href="admin.html" class="btn-icon btn-view" title="Ver Detalhes">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>124</td>
+                                <td>Carlos Oliveira</td>
+                                <td>5</td>
+                                <td>R$ 1.200,00</td>
+                                <td>Em Transporte</td>
+                                <td>PIX</td>
+                                <td>18/03/2025 10:15</td>
+                                <td class="action-buttons">
+                                    <a href="admin.html" class="btn-icon btn-view" title="Ver Detalhes">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>123</td>
+                                <td>Ana Costa</td>
+                                <td>2</td>
+                                <td>R$ 320,00</td>
+                                <td>Cancelado</td>
+                                <td>Boleto</td>
+                                <td>20/03/2025 16:45</td>
+                                <td class="action-buttons">
+                                    <a href="admin.html" class="btn-icon btn-view" title="Ver Detalhes">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Delete User Confirmation Section -->
-            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'userDelete'}" -->
-            <section id="delete-confirmation-user" class="admin-section" style="display:none">
-                <div class="admin-card" style="max-width:600px; margin:0 auto;">
-                    <div class="card-header">
-                        <h3>
-                            <i class="fas fa-exclamation-triangle text-warning"></i>
-                            Excluir Usuário
-                        </h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="delete-confirmation">
-                            <div class="warning-icon">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <h2>Confirmar Exclusão</h2>
-                            <p>Tem certeza que deseja excluir o usuário:</p>
-                            <h4 class="product-name-highlight">Maria Santos (maria.santos@email.com)</h4>
-                            <p class="warning-text">Esta ação não poderá ser desfeita.</p>
-                        </div>
-                    </div>
-
-                    <div class="card-footer delete-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
-                        <div class="form-actions" style="gap: 1rem;">
-                            <a href="admin.html" class="btn btn-outline">
-                                <i class="fas fa-times"></i> Cancelar
-                            </a>
-                            <a href="admin.html" class="btn btn-danger">
-                                <i class="fas fa-trash"></i> Excluir
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <!-- Usuários Section -->
-            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'user'}" -->
-            <section id="usuarios-section" class="admin-section" style="display:none">
+            <section th:if="${adminSection == 'user'}" id="usuarios-section" class="admin-section">
                 <div class="admin-header-section">
                     <h2><i class="fas fa-users"></i> Gestão de Usuários</h2>
                     <a href="admin.html" class="btn btn-primary" id="add-usuario-btn">
@@ -585,94 +569,106 @@
                 </div>
             </section>
 
-            <!-- Pedidos Section -->
-            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'order'}" -->
-            <section id="pedidos-section" class="admin-section" style="display:none">
-                <div class="admin-header-section">
-                    <h2><i class="fas fa-shopping-cart"></i> Gestão de Pedidos</h2>
-                </div>
-
-                <!-- Filters -->
-                <div class="admin-filters">
-                    <div class="filter-group">
-                        <input type="text" id="search-pedidos" placeholder="Buscar por cliente ou pedido..." class="admin-input">
-                        <select id="filter-status-pedido" class="admin-select" onchange="window.location.href = 'admin.html' + (this.value ? '?status=' + encodeURIComponent(this.value) : '')">
-                            <option value="" selected>Todos os Status</option>
-                            <option value="PENDING">Pendente</option>
-                            <option value="CONFIRMED">Confirmado</option>
-                            <option value="PAID">Pago</option>
-                            <option value="SHIPPED">Enviado</option>
-                            <option value="DELIVERED">Entregue</option>
-                            <option value="CANCELLED">Cancelado</option>
-                        </select>
+            <!-- Produtos Delete Confirmation Section -->
+            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'productDelete'}" -->
+            <section id="delete-confirmation" class="admin-section" style="display:none">
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3>
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                            Excluir Produto
+                        </h3>
                     </div>
+                    <div class="card-content">
+                        <div class="delete-confirmation">
+                            <div class="warning-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h2>Confirmar Exclusão</h2>
+                            <p>Tem certeza que deseja excluir o produto:</p>
+                            <h4 class="product-name-highlight">Notebook Dell Inspiron 15</h4>
+                            <p class="warning-text">Esta ação não poderá ser desfeita.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer delete-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
+                        <div class="form-actions" style="gap: 1rem;">
+                            <a href="admin.html" class="btn btn-outline">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                            <a href="admin.html" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Excluir
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categorias Section -->
+            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'category'}" -->
+            <section id="categorias-section" class="admin-section" style="display:none">
+                <div class="admin-header-section">
+                    <h2><i class="fas fa-tags"></i> Gestão de Categorias</h2>
+                    <button class="btn btn-primary" id="add-categoria-btn">
+                        <i class="fas fa-plus"></i> Adicionar Categoria
+                    </button>
                 </div>
 
                 <div class="admin-table-container">
-                    <table class="admin-table" id="pedidos-table">
+                    <table class="admin-table" id="categorias-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Cliente</th>
-                                <th>Total Itens</th>
-                                <th>Valor Total</th>
-                                <th>Status</th>
-                                <th>Pagamento</th>
-                                <th>Data</th>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Produtos</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="pedidos-tbody">
-                            <tr>
-                                <td>125</td>
-                                <td>Maria Santos</td>
-                                <td>3</td>
-                                <td>R$ 450,00</td>
-                                <td>Entregue</td>
-                                <td>Cartão de Crédito</td>
-                                <td>15/03/2025 14:30</td>
-                                <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-view" title="Ver Detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>124</td>
-                                <td>Carlos Oliveira</td>
-                                <td>5</td>
-                                <td>R$ 1.200,00</td>
-                                <td>Em Transporte</td>
-                                <td>PIX</td>
-                                <td>18/03/2025 10:15</td>
-                                <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-view" title="Ver Detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>123</td>
-                                <td>Ana Costa</td>
-                                <td>2</td>
-                                <td>R$ 320,00</td>
-                                <td>Cancelado</td>
-                                <td>Boleto</td>
-                                <td>20/03/2025 16:45</td>
-                                <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-view" title="Ver Detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                        <tbody id="categorias-tbody">
+                            <!-- Dynamic content -->
                         </tbody>
                     </table>
+                </div>
+            </section>
+
+            <!-- Delete User Confirmation Section -->
+            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'userDelete'}" -->
+            <section id="delete-confirmation-user" class="admin-section" style="display:none">
+                <div class="admin-card" style="max-width:600px; margin:0 auto;">
+                    <div class="card-header">
+                        <h3>
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                            Excluir Usuário
+                        </h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="delete-confirmation">
+                            <div class="warning-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h2>Confirmar Exclusão</h2>
+                            <p>Tem certeza que deseja excluir o usuário:</p>
+                            <h4 class="product-name-highlight">Maria Santos (maria.santos@email.com)</h4>
+                            <p class="warning-text">Esta ação não poderá ser desfeita.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-footer delete-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
+                        <div class="form-actions" style="gap: 1rem;">
+                            <a href="admin.html" class="btn btn-outline">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                            <a href="admin.html" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Excluir
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <script src="/js/main.js"></script>
-    <script src="/js/admin.js"></script>
+    <script th:src="@{/js/main.js}" src="../static/js/main.js"></script>
+    <script th:src="@{/js/admin.js}" src="../static/js/admin.js"></script>
 </body>
 </html>
