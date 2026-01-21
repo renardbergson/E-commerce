@@ -187,21 +187,22 @@
             <section th:if="${adminSection == 'product'}" id="produtos-section" class="admin-section">
                 <div class="admin-header-section">
                     <h2><i class="fas fa-box"></i> Gestão de Produtos</h2>
-                    <a href="admin.html" class="btn btn-primary" id="add-produto-btn">
+                    <p th:text="${product}"></p>
+                    <a th:href="@{/product}" class="btn btn-primary" id="add-produto-btn">
                         <i class="fas fa-plus"></i> Adicionar Produto
                     </a>
                 </div>
 
                 <!-- Products Form -->
-                <form id="produto-form" class="form-grid two-columns" action="admin.html" method="POST">
+                <form th:object="${product}" th:action="@{/product/save}" id="produto-form" class="form-grid two-columns" method="POST">
                     <input type="hidden" name="id" value="">
                     <div class="form-group">
                         <label for="produto-nome">Nome do Produto</label>
-                        <input type="text" id="produto-nome" name="name" required>
+                        <input type="text" id="produto-nome" th:field="*{name}" required>
                     </div>
                     <div class="form-group">
                         <label for="produto-categoria">Categoria</label>
-                        <select id="produto-categoria" name="category" required>
+                        <select id="produto-categoria" th:field="*{category}" required>
                             <option value="">Selecione uma categoria</option>
                             <option value="ELECTRONICS">Eletrônicos</option>
                             <option value="CLOTHING">Roupas e Acessórios</option>
@@ -214,18 +215,18 @@
                     </div>
                     <div class="form-group">
                         <label for="produto-preco">Preço</label>
-                        <input type="number" id="produto-preco" name="price" step="0.01" value="0" required>
+                        <input type="number" id="produto-preco" th:field="*{price}" step="0.01" value="0" required>
                     </div>
                     <div class="form-group">
                         <label for="produto-status">Status</label>
-                        <select id="produto-status" name="status" required>
+                        <select id="produto-status" th:field="*{state}" required>
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>
                         </select>
                     </div>
                     <div class="form-group full-width">
                         <label for="produto-descricao">Descrição</label>
-                        <textarea id="produto-descricao" name="description" rows="4" required></textarea>
+                        <textarea id="produto-descricao" th:field="*{description}" rows="4" required></textarea>
                     </div>
 
                     <div class="form-actions">
