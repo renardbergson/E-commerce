@@ -9,6 +9,21 @@ document.addEventListener('DOMContentLoaded', function() {
     initPasswordFeatures();
 });
 
+// Format categories to pt-BT
+function formatCategoriesPtBr(category) {
+    const categories = {
+        "ELECTRONICS": "Eletrônicos",
+        "CLOTHING": "Roupas e Acessórios",
+        "HOME_GARDEN": "Casa e Jardim",
+        "SPORTS": "Esportes e Lazer",
+        "TOYS": "Brinquedos",
+        "BEAUTY": "Beleza e Saúde",
+        "AUTOMOTIVE": "Automotivo"
+    }
+
+    return categories[category];
+}
+
 // Theme Toggle Setup
 function setupThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle');

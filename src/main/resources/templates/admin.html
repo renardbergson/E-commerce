@@ -187,7 +187,6 @@
             <section th:if="${adminSection == 'product'}" id="produtos-section" class="admin-section">
                 <div class="admin-header-section">
                     <h2><i class="fas fa-box"></i> Gestão de Produtos</h2>
-                    <p th:text="${product}"></p>
                     <a th:href="@{/product}" class="btn btn-primary" id="add-produto-btn">
                         <i class="fas fa-plus"></i> Adicionar Produto
                     </a>
@@ -195,7 +194,7 @@
 
                 <!-- Products Form -->
                 <form th:object="${product}" th:action="@{/product/save}" id="produto-form" class="form-grid two-columns" method="POST">
-                    <input type="hidden" name="id" value="">
+                    <input type="hidden" th:field="*{id}"> <!-- Ao enviar o ID junto com o formulário -->
                     <div class="form-group">
                         <label for="produto-nome">Nome do Produto</label>
                         <input type="text" id="produto-nome" th:field="*{name}" required>
@@ -273,18 +272,18 @@
                         </thead>
                         <tbody>
                             <tr th:each="product : ${products}">
-                                <td th:text="${product.id}">1</td>
+                                <td th:text="${product.id}">id do Produto</td>
                                 <td th:text="${product.name}">Descrição do Produto</td>
                                 <td th:text="${product.category}">Categoria do Produto</td>
                                 <td th:text="${product.price}">R$ 00,00</td>
                                 <td th:text="${product.state}">ativo</td>
                                 <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-edit" title="Editar">
+                                    <a th:href="@{/product/edit/{id}(id=${product.id})}" class="btn-icon btn-edit" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="admin.html" class="btn-icon btn-delete" title="Excluir">
+                                    <button href="admin.html" class="btn-icon btn-delete" title="Excluir">
                                         <i class="fas fa-trash"></i>
-                                    </a>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
