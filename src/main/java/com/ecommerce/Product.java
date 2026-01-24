@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Getter // gera os getters para os campos da classe
 @Setter // gera os setters para os campos da classe
-@ToString // gera o método toString para a classe
+@ToString // gera o metodo toString para a classe
 @NoArgsConstructor // gera o construtor sem argumentos para a classe
 @Entity // transforma a classe em uma entidade JPA, será convertida em uma tabela no banco de dados
 public class Product {

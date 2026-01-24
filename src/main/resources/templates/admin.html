@@ -272,42 +272,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Notebook Dell Inspiron 15</td>
-                                <td>Eletrônicos</td>
-                                <td>R$ 3.499,00</td>
-                                <td>ativo</td>
-                                <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-edit" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="admin.html" class="btn-icon btn-delete" title="Excluir">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Mouse Gamer RGB</td>
-                                <td>Eletrônicos</td>
-                                <td>R$ 149,90</td>
-                                <td>ativo</td>
-                                <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-edit" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="admin.html" class="btn-icon btn-delete" title="Excluir">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Camiseta Algodão Premium</td>
-                                <td>Roupas e Acessórios</td>
-                                <td>R$ 79,90</td>
-                                <td>inativo</td>
+                            <tr th:each="product : ${products}">
+                                <td th:text="${product.id}">1</td>
+                                <td th:text="${product.name}">Descrição do Produto</td>
+                                <td th:text="${product.category}">Categoria do Produto</td>
+                                <td th:text="${product.price}">R$ 00,00</td>
+                                <td th:text="${product.state}">ativo</td>
                                 <td class="action-buttons">
                                     <a href="admin.html" class="btn-icon btn-edit" title="Editar">
                                         <i class="fas fa-edit"></i>
