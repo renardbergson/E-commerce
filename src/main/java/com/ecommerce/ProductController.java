@@ -18,7 +18,9 @@ public class ProductController {
 
   @GetMapping("/product")
   public String product(Model model) {
-    model.addAttribute("adminSection", "product");
+    if(!model.containsAttribute("adminSection")) {
+      model.addAttribute("adminSection", "product");
+    }
     if(!model.containsAttribute("product")) {
       model.addAttribute("product", new Product());
     }
@@ -44,6 +46,22 @@ public class ProductController {
     } else {
       System.out.println("Product not found with id: " + id);
     }
+    return "redirect:/product";
+  }
+
+  @GetMapping("/product/delete/{id}")
+  public String deleteProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    Optional<Product> product = productRepository.findById(id);
+    if(product.isPresent()) {
+      redirectAttributes.addFlashAttribute("product", product.get());
+      redirectAttributes.addFlashAttribute("adminSection", "deleteProduct");
+    }
+    return "redirect:/product";
+  }
+
+  @GetMapping("/product/delete/confirm/{id}")
+  public String deleteProductConfirm(@PathVariable Long id) {
+    productRepository.deleteById(id);
     return "redirect:/product";
   }
 }

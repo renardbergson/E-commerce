@@ -281,9 +281,9 @@
                                     <a th:href="@{/product/edit/{id}(id=${product.id})}" class="btn-icon btn-edit" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button href="admin.html" class="btn-icon btn-delete" title="Excluir">
+                                    <a th:href="@{/product/delete/{id}(id=${product.id})}" class="btn-icon btn-delete" title="Excluir">
                                         <i class="fas fa-trash"></i>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
@@ -540,8 +540,7 @@
             </section>
 
             <!-- Produtos Delete Confirmation Section -->
-            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'productDelete'}" -->
-            <section id="delete-confirmation" class="admin-section" style="display:none">
+            <section th:if="${adminSection == 'deleteProduct'}" id="delete-confirmation" class="admin-section">
                 <div class="admin-card">
                     <div class="card-header">
                         <h3>
@@ -556,16 +555,16 @@
                             </div>
                             <h2>Confirmar Exclusão</h2>
                             <p>Tem certeza que deseja excluir o produto:</p>
-                            <h4 class="product-name-highlight">Notebook Dell Inspiron 15</h4>
+                            <h4 th:text="${product.name}" class="product-name-highlight">Nome do produto</h4>
                             <p class="warning-text">Esta ação não poderá ser desfeita.</p>
                         </div>
                     </div>
                     <div class="card-footer delete-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
                         <div class="form-actions" style="gap: 1rem;">
-                            <a href="admin.html" class="btn btn-outline">
+                            <a th:href="@{/product}" class="btn btn-outline">
                                 <i class="fas fa-times"></i> Cancelar
                             </a>
-                            <a href="admin.html" class="btn btn-danger">
+                            <a th:href="@{/product/delete/confirm/{id}(id=${product.id})}" class="btn btn-danger">
                                 <i class="fas fa-trash"></i> Excluir
                             </a>
                         </div>
