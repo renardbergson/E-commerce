@@ -24,6 +24,7 @@ public class ProductController {
     if(!model.containsAttribute("product")) {
       model.addAttribute("product", new Product());
     }
+    model.addAttribute("categories", ProductCategory.values());
     model.addAttribute("products", productRepository.findAll());
     return "admin";
   }

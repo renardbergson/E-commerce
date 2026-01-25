@@ -203,13 +203,12 @@
                         <label for="produto-categoria">Categoria</label>
                         <select id="produto-categoria" th:field="*{category}" required>
                             <option value="">Selecione uma categoria</option>
-                            <option value="ELECTRONICS">Eletrônicos</option>
-                            <option value="CLOTHING">Roupas e Acessórios</option>
-                            <option value="HOME_GARDEN">Casa e Jardim</option>
-                            <option value="SPORTS">Esportes e Lazer</option>
-                            <option value="TOYS">Brinquedos</option>
-                            <option value="BEAUTY">Beleza e Saúde</option>
-                            <option value="AUTOMOTIVE">Automotivo</option>
+                            <option th:each="category : ${categories}"
+                                    th:value="${category.name()}"
+                                    th:text="${category.description}"
+                            >
+                                Categoria do Produto
+                            </option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -247,13 +246,13 @@
                         <input type="text" id="search-produtos" placeholder="Buscar produtos..." class="admin-input">
                         <select id="filter-categoria" class="admin-select" onchange="window.location.href = 'admin.html' + (this.value ? '?category=' + encodeURIComponent(this.value) : '')">
                             <option value="" selected>Todas as categorias</option>
-                            <option value="ELECTRONICS">Eletrônicos</option>
-                            <option value="CLOTHING">Roupas e Acessórios</option>
-                            <option value="HOME_GARDEN">Casa e Jardim</option>
-                            <option value="SPORTS">Esportes e Lazer</option>
-                            <option value="TOYS">Brinquedos</option>
-                            <option value="BEAUTY">Beleza e Saúde</option>
-                            <option value="AUTOMOTIVE">Automotivo</option>
+                            <option
+                                    th:each="category : ${categories}"
+                                    th:value="${category.name()}"
+                                    th:text="${category.description}"
+                            >
+                                Categoria
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -274,7 +273,7 @@
                             <tr th:each="product : ${products}">
                                 <td th:text="${product.id}">id do Produto</td>
                                 <td th:text="${product.name}">Descrição do Produto</td>
-                                <td th:text="${product.category}">Categoria do Produto</td>
+                                <td th:text="${product.category.description}">Categoria do Produto</td>
                                 <td th:text="${product.price}">R$ 00,00</td>
                                 <td th:text="${product.state}">ativo</td>
                                 <td class="action-buttons">

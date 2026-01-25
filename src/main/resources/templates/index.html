@@ -58,8 +58,8 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-container">
-            <h2 th:text="${title}">Slogan da loja</h2>
-            <p th:text="${description}">Descrição da loja</p>
+            <h2>A Sua Loja Online</h2>
+            <p>Descubra produtos incríveis com os melhores preços e entrega rápida. Tecnologia e qualidade em um só lugar.</p>
             <a href="#produtos" class="btn btn-primary">Ver Produtos</a>
         </div>
     </section>
@@ -151,14 +151,21 @@
 
             <!-- Categories Filter -->
             <div class="categories-filter">
-                <a href="index.html" class="category-btn active" data-category="all">Todos</a>
-                <a href="index.html?category=ELECTRONICS" class="category-btn"><span>Eletrônicos</span></a>
-                <a href="index.html?category=CLOTHING" class="category-btn"><span>Roupas</span></a>
-                <a href="index.html?category=HOME_GARDEN" class="category-btn"><span>Casa e Jardim</span></a>
-                <a href="index.html?category=SPORTS" class="category-btn"><span>Esportes</span></a>
-                <a href="index.html?category=TOYS" class="category-btn"><span>Brinquedos</span></a>
-                <a href="index.html?category=BEAUTY" class="category-btn"><span>Beleza</span></a>
-                <a href="index.html?category=AUTOMOTIVE" class="category-btn"><span>Automotivo</span></a>
+                <a th:href="@{/}"
+                   th:classappend="${categoryFilter == 'ALL'} ? ' active' : ''"
+                   class="category-btn"
+                   data-category="all"
+                >
+                    Todos
+                </a>
+
+                <a th:each="category : ${categories}"
+                   th:href="@{/(categoryFilter=${category})}"
+                   th:classappend="${categoryFilter == category} ? ' active' : ''"
+                   class="category-btn"
+                >
+                    <span th:text="${category.description}"></span>
+                </a>
             </div>
 
             <!-- Products Grid -->

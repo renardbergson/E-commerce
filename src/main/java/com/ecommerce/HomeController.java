@@ -3,14 +3,14 @@ package com.ecommerce;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
   @GetMapping("/")
-  public String home(Model model) {
-    model.addAttribute("title", "A Sua Loja Online");
-    model.addAttribute("description", "Descubra produtos incríveis com os melhores preços e entrega rápida. Tecnologia e qualidade em um só lugar.");
-    
+  public String home(Model model, @RequestParam(required = false) ProductCategory categoryFilter) {
+    model.addAttribute("categories", ProductCategory.values());
+    model.addAttribute("categoryFilter", categoryFilter != null ? categoryFilter : "ALL");
     return "index";
   }
 }
