@@ -244,12 +244,18 @@
                 <div class="admin-filters">
                     <div class="filter-group">
                         <input type="text" id="search-produtos" placeholder="Buscar produtos..." class="admin-input">
-                        <select id="filter-categoria" class="admin-select" onchange="window.location.href = 'admin.html' + (this.value ? '?category=' + encodeURIComponent(this.value) : '')">
-                            <option value="" selected>Todas as categorias</option>
+                        <select id="filter-categoria" class="admin-select" onchange="window.location.href = this.value ? `/product?categoryFilter=${encodeURIComponent(this.value)}` : '/product'">
+                            <option
+                                    value=""
+                                    th:selected="${categoryFilter == 'ALL'}"
+                            >
+                                Todas as categorias
+                            </option>
                             <option
                                     th:each="category : ${categories}"
                                     th:value="${category.name()}"
                                     th:text="${category.description}"
+                                    th:selected="${categoryFilter == category.name()}"
                             >
                                 Categoria
                             </option>

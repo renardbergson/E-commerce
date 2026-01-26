@@ -170,120 +170,20 @@
 
             <!-- Products Grid -->
             <div class="products-grid" id="products-container">
-                <!-- Product Card 1 -->
-                <div class="product-card" data-category="ELECTRONICS">
+                <!-- Product Card -->
+                <div th:each="product : ${products}" class="product-card" th:attr="data-category=${product.category}">
                     <div class="product-image">
-                        <i class="fas fa-laptop"></i>
+                        <i th:class="'fas ' + ${product.category.icon}"></i>
                     </div>
                     <div class="product-info">
-                        <h4 class="product-title">Notebook Dell Inspiron</h4>
-                        <p class="product-description">Intel Core i5, 8GB RAM, 256GB SSD</p>
-                        <div class="product-price">R$ 2.199,00</div>
+                        <h4 th:text="${product.name}" class="product-title">Nome do produto</h4>
+                        <p th:text="${product.description}" class="product-description">Descrição do produto</p>
+                        <div th:text="'R$ ' + ${#numbers.formatDecimal(product.price, 1, 2)}" class="product-price">R$ 00,00</div>
                         <div class="product-actions">
-                            <button class="btn btn-outline btn-small" onclick="viewProduct(1)">
+                            <button class="btn btn-outline btn-small" th:onclick="|viewProduct(${product.id})|"> <!-- substituição literal do thymeleaf (||) -->
                                 <i class="fas fa-eye"></i><br>Detalhe
                             </button>
                             <a href="index.html?addToCart=1" class="btn btn-primary btn-small">
-                                <i class="fas fa-cart-plus"></i><br>Adicionar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Card 2 -->
-                <div class="product-card" data-category="ELECTRONICS">
-                    <div class="product-image">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="product-info">
-                        <h4 class="product-title">Smartphone Galaxy S21</h4>
-                        <p class="product-description">128GB, 5G, Câmera 64MP</p>
-                        <div class="product-price">R$ 1.299,00</div>
-                        <div class="product-actions">
-                            <button class="btn btn-outline btn-small" onclick="viewProduct(2)">
-                                <i class="fas fa-eye"></i><br>Detalhe
-                            </button>
-                            <a href="index.html?addToCart=2" class="btn btn-primary btn-small">
-                                <i class="fas fa-cart-plus"></i><br>Adicionar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Card 3 -->
-                <div class="product-card" data-category="CLOTHING">
-                    <div class="product-image">
-                        <i class="fas fa-tshirt"></i>
-                    </div>
-                    <div class="product-info">
-                        <h4 class="product-title">Camiseta Premium</h4>
-                        <p class="product-description">100% Algodão, Tamanhos P ao GG</p>
-                        <div class="product-price">R$ 89,90</div>
-                        <div class="product-actions">
-                            <button class="btn btn-outline btn-small" onclick="viewProduct(3)">
-                                <i class="fas fa-eye"></i><br>Detalhe
-                            </button>
-                            <a href="index.html?addToCart=3" class="btn btn-primary btn-small">
-                                <i class="fas fa-cart-plus"></i><br>Adicionar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Card 4 -->
-                <div class="product-card" data-category="HOME_GARDEN">
-                    <div class="product-image">
-                        <i class="fas fa-couch"></i>
-                    </div>
-                    <div class="product-info">
-                        <h4 class="product-title">Sofá Confort</h4>
-                        <p class="product-description">3 Lugares, Tecido Impermeável</p>
-                        <div class="product-price">R$ 1.590,00</div>
-                        <div class="product-actions">
-                            <button class="btn btn-outline btn-small" onclick="viewProduct(4)">
-                                <i class="fas fa-eye"></i><br>Detalhe
-                            </button>
-                            <a href="index.html?addToCart=4" class="btn btn-primary btn-small">
-                                <i class="fas fa-cart-plus"></i><br>Adicionar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Card 5 -->
-                <div class="product-card" data-category="SPORTS">
-                    <div class="product-image">
-                        <i class="fas fa-dumbbell"></i>
-                    </div>
-                    <div class="product-info">
-                        <h4 class="product-title">Kit Halteres</h4>
-                        <p class="product-description">Par de 5kg, Revestimento Emborrachado</p>
-                        <div class="product-price">R$ 149,90</div>
-                        <div class="product-actions">
-                            <button class="btn btn-outline btn-small" onclick="viewProduct(5)">
-                                <i class="fas fa-eye"></i><br>Detalhe
-                            </button>
-                            <a href="index.html?addToCart=5" class="btn btn-primary btn-small">
-                                <i class="fas fa-cart-plus"></i><br>Adicionar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Card 6 -->
-                <div class="product-card" data-category="TOYS">
-                    <div class="product-image">
-                        <i class="fas fa-gamepad"></i>
-                    </div>
-                    <div class="product-info">
-                        <h4 class="product-title">Console Game Pro</h4>
-                        <p class="product-description">512GB, 4K, 2 Controles</p>
-                        <div class="product-price">R$ 2.899,00</div>
-                        <div class="product-actions">
-                            <button class="btn btn-outline btn-small" onclick="viewProduct(6)">
-                                <i class="fas fa-eye"></i><br>Detalhe
-                            </button>
-                            <a href="index.html?addToCart=6" class="btn btn-primary btn-small">
                                 <i class="fas fa-cart-plus"></i><br>Adicionar
                             </a>
                         </div>
