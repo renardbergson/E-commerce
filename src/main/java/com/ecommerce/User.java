@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,6 +30,11 @@ public class User {
     private String phone;
     private String password;
     private Boolean newsletter;
+    // somente o banco será responsável por preencher a coluna created_at
+    // columnDefinition = "TIMESTAMP DEFAULT NOW()" => a coluna será definida como TIMESTAMP
+    // e, como nenhum valor é informado na hora do insert, o banco usará NOW() como padrão
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT NOW()", insertable = false, updatable = false) //
+    private LocalDateTime createdAt;
 
     // enum interno porque é usado apenas nesta classe
     public enum Status {

@@ -46,7 +46,7 @@
 
                 <br>
 
-                <form class="auth-form" action="index.html" method="post">
+                <form class="auth-form" th:action="@{/signin}" method="post">
                     <div class="form-group">
                         <label for="email">
                             <i class="fas fa-envelope"></i> E-mail
@@ -104,7 +104,7 @@
                 </form>
 
                 <div class="auth-footer">
-                    <p>Não tem uma conta? <a href="signup.html" class="auth-link">Criar conta</a></p>
+                    <p>Não tem uma conta? <a th:href="@{/signup}" class="auth-link">Criar conta</a></p>
                 </div>
             </div>
 
