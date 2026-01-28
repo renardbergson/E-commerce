@@ -1,5 +1,6 @@
 package com.ecommerce;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +23,12 @@ public class LoginController {
   }
 
   @PostMapping("/signin")
-  public String signin(@RequestParam  String email, @RequestParam String password, RedirectAttributes redirectAttributes) {
+  public String signin(
+          @RequestParam  String email,
+          @RequestParam String password,
+          RedirectAttributes redirectAttributes,
+          HttpSession session
+  ){
     System.out.println("attempting to signin for: " + email + " - " + password);
     String errorMessage = "Usuário ou senha inválidos";
     String successMessage = "Usuário autenticado com sucesso!";
@@ -42,6 +48,7 @@ public class LoginController {
     }
     System.out.println(successMessage + " => " + search.get());
     redirectAttributes.addFlashAttribute("success", successMessage);
+    session.setAttribute("loggedUser", search.get());
     return "redirect:/";
   }
 
@@ -52,7 +59,9 @@ public class LoginController {
   }
 
   @GetMapping("/logout")
-  public String logout() {
+  public String logout(HttpSession session) {
+    session.invalidate();
+    System.out.println("User logged out successfully!");
     return "redirect:/";
   }
 }

@@ -32,7 +32,9 @@
                 </a>
                 <div class="dropdown">
                     <button class="btn btn-outline dropdown-toggle" id="profile-dropdown">
-                        <i class="fas fa-user"></i> <span>Perfil</span> <i class="fas fa-chevron-down"></i>
+                        <i class="fas fa-user"></i>
+                        <span th:text="${loggedUser != null ? loggedUser.firstName : 'Perfil'}">Nome Usuário</span>
+                        <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="dropdown-menu" id="dropdown-menu">
                         <a th:href="@{/signin}" class="dropdown-item">
