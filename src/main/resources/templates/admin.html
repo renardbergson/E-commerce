@@ -390,31 +390,30 @@
                 </div>
 
                 <!-- Formulário para inserir ou editar usuário -->
-                <form id="usuario-form" class="form-grid two-columns" action="admin.html" method="POST">
-                    <input type="hidden" name="id" value="">
-                    <input type="hidden" name="createdAt" value="">
+                <form id="usuario-form" class="form-grid two-columns" th:action="@{/user/save}" method="POST" th:object="${user}">
+                    <input type="hidden" th:field="*{id}">
                     <div class="form-group">
                         <label for="usuario-firstname">Nome</label>
-                        <input type="text" id="usuario-firstname" name="firstName" required>
+                        <input type="text" id="usuario-firstname" th:field="*{firstName}" required>
                     </div>
                     <div class="form-group">
                         <label for="usuario-lastname">Sobrenome</label>
-                        <input type="text" id="usuario-lastname" name="lastName" required>
+                        <input type="text" id="usuario-lastname" th:field="*{lastName}" required>
                     </div>
                     <div class="form-group">
                         <label for="usuario-email">E-mail</label>
-                        <input type="email" id="usuario-email" name="email" required>
+                        <input type="email" id="usuario-email" th:field="*{email}" required>
                     </div>
                     <div class="form-group">
                         <label for="usuario-phone">Telefone</label>
-                        <input type="tel" id="usuario-phone" name="phone" required placeholder="(11) 99999-9999" maxlength="15">
+                        <input type="tel" id="usuario-phone" th:field="*{phone}" required placeholder="(11) 99999-9999" maxlength="15">
                     </div>
                     <div class="form-group">
                         <label for="usuario-password">
                             <i class="fas fa-lock"></i> Senha
                         </label>
                         <div class="password-field">
-                            <input type="password" id="usuario-password" name="password" required placeholder="Digite a senha" minlength="8">
+                            <input type="password" id="usuario-password" th:field="*{password}" required placeholder="Digite a senha" minlength="8">
                             <button type="button" class="password-toggle" id="usuario-password-toggle">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -444,19 +443,16 @@
 
                     <div class="form-group">
                         <label for="usuario-status">Status</label>
-                        <select id="usuario-status" name="status" required>
+                        <select id="usuario-status" th:field="*{status}" required>
                             <option value="">Selecione um status</option>
-                            <option value="ACTIVE">Ativo</option>
-                            <option value="INACTIVE">Inativo</option>
-                            <option value="BLOCKED">Bloqueado</option>
-                            <option value="SUSPENDED">Suspenso</option>
+                            <option th:each="status : ${userStatusList}" th:text="${status.description}" th:value="${status}">Status</option>
                         </select>
                     </div>
 
                     <div class="form-actions">
-                        <button type="button" class="btn btn-outline btn-form">
+                        <a th:href="@{/user}" class="btn btn-outline btn-form">
                             <i class="fas fa-times"></i> Cancelar
-                        </button>
+                        </a>
                         <button type="submit" class="btn btn-primary btn-form">
                             <i class="fas fa-save"></i> Salvar
                         </button>
@@ -468,12 +464,20 @@
                 <div class="admin-filters">
                     <div class="filter-group">
                         <input type="text" id="search-usuarios" placeholder="Buscar usuários..." class="admin-input">
-                        <select id="filter-status" class="admin-select" onchange="window.location.href = 'admin.html' + (this.value ? '?status=' + encodeURIComponent(this.value) : '')">
-                            <option value="" selected>Todos os status</option>
-                            <option value="ACTIVE">Ativo</option>
-                            <option value="INACTIVE">Inativo</option>
-                            <option value="BLOCKED">Bloqueado</option>
-                            <option value="SUSPENDED">Suspenso</option>
+                        <select id="filter-status" class="admin-select" onchange="window.location.href = '/user' + (this.value ? '?statusFilter=' + encodeURIComponent(this.value) : '')">
+                            <option
+                                    value=""
+                                    th:selected="${statusFilter == 'ALL'}"
+                            >
+                                Todos os status
+                            </option>
+                            <option th:each="status : ${userStatusList}"
+                                    th:value="${status.name()}"
+                                    th:text="${status.description}"
+                                    th:selected="${statusFilter == status.name()}"
+                            >
+                                Status
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -493,56 +497,60 @@
                             </tr>
                         </thead>
                         <tbody id="usuarios-tbody">
-                            <tr>
-                                <td>1</td>
-                                <td>Maria Santos</td>
-                                <td>maria.santos@email.com</td>
-                                <td>(11) 98765-4321</td>
-                                <td>ACTIVE</td>
-                                <td>15/03/2025 14:30</td>
+                            <tr th:each="user : ${users}">
+                                <td th:text="${user.id}">Id</td>
+                                <td th:text="|${user.firstName} ${user.lastName}|">Nome do usuário</td>
+                                <td th:text="${user.email}">email@email.com</td>
+                                <td th:text="${user.phone}">(00) 00000-0000</td>
+                                <td th:text="${user.status.description}">STATUS</td>
+                                <!-- Função disponibilizada pelo Thymeleaf para formatar datas -->
+                                <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy HH:mm')}">00/00/0000 00:00</td>
                                 <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-edit" title="Editar">
+                                    <a th:href="@{/user/edit/{id}(id=${user.id})}" class="btn-icon btn-edit" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="admin.html" class="btn-icon btn-delete" title="Excluir">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Carlos Oliveira</td>
-                                <td>carlos.oliveira@email.com</td>
-                                <td>(21) 97654-3210</td>
-                                <td>ACTIVE</td>
-                                <td>18/03/2025 10:15</td>
-                                <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-edit" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="admin.html" class="btn-icon btn-delete" title="Excluir">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Ana Costa</td>
-                                <td>ana.costa@email.com</td>
-                                <td>(31) 96543-2109</td>
-                                <td>INACTIVE</td>
-                                <td>20/03/2025 16:45</td>
-                                <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-edit" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="admin.html" class="btn-icon btn-delete" title="Excluir">
+                                    <a th:href="@{/user/delete/{id}(id=${user.id})}" class="btn-icon btn-delete" title="Excluir">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </section>
+
+            <!-- Delete User Confirmation Section -->
+            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'userDelete'}" -->
+            <section id="delete-confirmation-user" class="admin-section" style="display:none">
+                <div class="admin-card" style="max-width:600px; margin:0 auto;">
+                    <div class="card-header">
+                        <h3>
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                            Excluir Usuário
+                        </h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="delete-confirmation">
+                            <div class="warning-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h2>Confirmar Exclusão</h2>
+                            <p>Tem certeza que deseja excluir o usuário:</p>
+                            <h4 class="product-name-highlight">Maria Santos (maria.santos@email.com)</h4>
+                            <p class="warning-text">Esta ação não poderá ser desfeita.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-footer delete-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
+                        <div class="form-actions" style="gap: 1rem;">
+                            <a href="admin.html" class="btn btn-outline">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                            <a href="admin.html" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Excluir
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -604,41 +612,6 @@
                             <!-- Dynamic content -->
                         </tbody>
                     </table>
-                </div>
-            </section>
-
-            <!-- Delete User Confirmation Section -->
-            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'userDelete'}" -->
-            <section id="delete-confirmation-user" class="admin-section" style="display:none">
-                <div class="admin-card" style="max-width:600px; margin:0 auto;">
-                    <div class="card-header">
-                        <h3>
-                            <i class="fas fa-exclamation-triangle text-warning"></i>
-                            Excluir Usuário
-                        </h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="delete-confirmation">
-                            <div class="warning-icon">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <h2>Confirmar Exclusão</h2>
-                            <p>Tem certeza que deseja excluir o usuário:</p>
-                            <h4 class="product-name-highlight">Maria Santos (maria.santos@email.com)</h4>
-                            <p class="warning-text">Esta ação não poderá ser desfeita.</p>
-                        </div>
-                    </div>
-
-                    <div class="card-footer delete-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
-                        <div class="form-actions" style="gap: 1rem;">
-                            <a href="admin.html" class="btn btn-outline">
-                                <i class="fas fa-times"></i> Cancelar
-                            </a>
-                            <a href="admin.html" class="btn btn-danger">
-                                <i class="fas fa-trash"></i> Excluir
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </section>
         </main>

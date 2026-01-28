@@ -24,22 +24,24 @@ public class LoginController {
   @PostMapping("/signin")
   public String signin(@RequestParam  String email, @RequestParam String password, RedirectAttributes redirectAttributes) {
     System.out.println("attempting to signin for: " + email + " - " + password);
-    String errorMessage = "Invalid e-mail or password";
+    String errorMessage = "Usuário ou senha inválidos";
+    String successMessage = "Usuário autenticado com sucesso!";
     // "Optional" porque a interface CrudRepository retorna um generics do tipo
     // Optional<T>para o metodo findById, então seguimos a mesma linha de pensamento
     Optional<User> search = userRepository.findByEmail(email);
     if(search.isEmpty()) {
+      System.out.println(errorMessage);
       redirectAttributes.addFlashAttribute("error", errorMessage);
       return "redirect:/signin";
     }
     String userPass = search.get().getPassword();
     if(!userPass.equals(password)) {
-      System.out.println("Invalid password for email " + email);
+      System.out.println(errorMessage);
       redirectAttributes.addFlashAttribute("error", errorMessage);
       return "redirect:/signin";
     }
-    System.out.println("User logged in successfully: " + search.get());
-    redirectAttributes.addFlashAttribute("success", "User logged in successfully!");
+    System.out.println(successMessage + " => " + search.get());
+    redirectAttributes.addFlashAttribute("success", successMessage);
     return "redirect:/";
   }
 

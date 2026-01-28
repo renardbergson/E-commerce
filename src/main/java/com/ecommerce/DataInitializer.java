@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements CommandLineRunner {
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -70,6 +72,14 @@ public class DataInitializer implements CommandLineRunner {
                         insertProduct("Oleo 5W30", ProductCategory.AUTOMOTIVE, "ativo", 55.00, "Oleo sintetico 1L 5W30")
                 )
         );
+
+        userRepository.saveAll(
+                List.of(
+                        insertUser("Renard", "Bergson", "renard.contato@gmail.com", "(83)98141-3123", "Fl@010892", true, User.Status.ACTIVE),
+                        insertUser("Esdras", "Medeiros", "esdras.contato@gmail.com", "(83)00000-0000", "Fl@010892", true, User.Status.INACTIVE),
+                        insertUser("Asriel", "Lucas", "asriel.contato@gmail.com", "(83)00000-0000", "Fl@010892", true, User.Status.SUSPENDED)
+                )
+        );
     }
 
     private Product insertProduct(String name, ProductCategory category, String state, double price, String description) {
@@ -80,5 +90,17 @@ public class DataInitializer implements CommandLineRunner {
         product.setPrice(price);
         product.setDescription(description);
         return product;
+    }
+
+    private User insertUser(String firstName, String lastName, String email, String phone, String password, Boolean newsletter, User.Status status) {
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setPassword(password);
+        user.setNewsletter(newsletter);
+        user.setStatus(status);
+        return user;
     }
 }

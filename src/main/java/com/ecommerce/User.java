@@ -37,10 +37,18 @@ public class User {
     private LocalDateTime createdAt;
 
     // enum interno porque é usado apenas nesta classe
+
+    @Getter
     public enum Status {
-        ACTIVE,
-        INACTIVE,
-        SUSPENDED
+        ACTIVE("Ativo"),
+        INACTIVE("Inativo"),
+        SUSPENDED("Suspenso");
+
+        private final String description;
+
+        Status(String description) {
+            this.description = description;
+        }
     }
 
     public User active() {
