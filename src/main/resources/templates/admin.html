@@ -520,8 +520,7 @@
             </section>
 
             <!-- Delete User Confirmation Section -->
-            <!-- ⚠️ THYMELEAF: Remover style="display:none" e adicionar th:if="${adminSection == 'userDelete'}" -->
-            <section id="delete-confirmation-user" class="admin-section" style="display:none">
+            <section th:if="${adminSection == 'deleteUser'}" id="delete-confirmation-user" class="admin-section">
                 <div class="admin-card" style="max-width:600px; margin:0 auto;">
                     <div class="card-header">
                         <h3>
@@ -536,17 +535,18 @@
                             </div>
                             <h2>Confirmar Exclusão</h2>
                             <p>Tem certeza que deseja excluir o usuário:</p>
-                            <h4 class="product-name-highlight">Maria Santos (maria.santos@email.com)</h4>
-                            <p class="warning-text">Esta ação não poderá ser desfeita.</p>
+                            <h4 th:text="|${user.firstName} ${user.lastName}|" class="product-name-highlight">Nome do usuário</h4>
+                            <p th:text="${user.email}">E-mail do usuário</p>
+                            <p class="warning-text">Esta ação não poderá ser desfeita!</p>
                         </div>
                     </div>
 
                     <div class="card-footer delete-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
                         <div class="form-actions" style="gap: 1rem;">
-                            <a href="admin.html" class="btn btn-outline">
+                            <a th:href="@{/user}" class="btn btn-outline">
                                 <i class="fas fa-times"></i> Cancelar
                             </a>
-                            <a href="admin.html" class="btn btn-danger">
+                            <a th:href="@{/user/delete/confirm/{id}(id=${user.id})}" class="btn btn-danger">
                                 <i class="fas fa-trash"></i> Excluir
                             </a>
                         </div>

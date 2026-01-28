@@ -15,6 +15,9 @@ public class UserController {
 
   @GetMapping("/user")
   public String dashboard(Model model, @RequestParam(required = false) User.Status statusFilter) {
+    if(!model.containsAttribute("adminSection")) {
+      model.addAttribute("adminSection", "user");
+    }
     if(!model.containsAttribute("user")) {
       model.addAttribute("user", new User());
     }
@@ -24,7 +27,6 @@ public class UserController {
     } else {
       users = userRepository.findAll();
     }
-    model.addAttribute("adminSection", "user");
     model.addAttribute("users", users);
     model.addAttribute("userStatusList", User.Status.values());
     model.addAttribute("statusFilter", statusFilter != null ? statusFilter.name() : "ALL");
@@ -41,6 +43,24 @@ public class UserController {
     } else {
       System.out.println("User not found!");
     }
+    return "redirect:/user";
+  }
+
+  @GetMapping("/user/delete/{id}")
+  public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    Optional<User> user = userRepository.findById(id);
+    // expressão lambda simples usada em metodo da classe Optional, substituindo IF tradicional
+    user.ifPresent(u -> {
+      redirectAttributes.addFlashAttribute("user", u);
+      redirectAttributes.addFlashAttribute("adminSection", "deleteUser");
+    });
+    return "redirect:/user";
+  }
+
+  @DeleteMapping("/user/delete/confirm/{id}")
+  public String deleteConfirm(@PathVariable Long id) {
+    userRepository.deleteById(id);
+    System.out.println("User deleted successfully with id: " + id);
     return "redirect:/user";
   }
 
