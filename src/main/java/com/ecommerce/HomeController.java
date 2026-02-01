@@ -18,6 +18,9 @@ public class HomeController {
           @RequestParam(required = false) ProductCategory categoryFilter,
           HttpSession session
   ){
+    model.addAttribute("categories", ProductCategory.values());
+    model.addAttribute("categoryFilter", categoryFilter != null ? categoryFilter : "ALL");
+
     // O metodo findAll() na interface CrudRepository retorna um generics do tipo
     // Iterable<T>, por isso, mantivemos o mesmo tipo na variável "products"
     Iterable<Product> products;
@@ -26,14 +29,19 @@ public class HomeController {
     } else {
       products = productRepository.findAll();
     }
+    model.addAttribute("products", products);
+
     User loggedUser = (User) session.getAttribute("loggedUser");
     if(loggedUser != null) {
       System.out.println("Usuário logado: " + loggedUser);
       model.addAttribute("loggedUser", loggedUser);
     }
-    model.addAttribute("products", products);
-    model.addAttribute("categories", ProductCategory.values());
-    model.addAttribute("categoryFilter", categoryFilter != null ? categoryFilter : "ALL");
+
+    ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("shoppingCart");
+    if(shoppingCart != null) {
+      model.addAttribute("shoppingCart", shoppingCart);
+    }
+
     return "index";
   }
 }

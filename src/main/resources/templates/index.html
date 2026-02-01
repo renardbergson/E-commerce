@@ -26,9 +26,9 @@
                 <li><a th:href="@{/order}">Meus Pedidos</a></li>
             </ul>
             <div class="user-actions">
-                <a href="index.html" class="cart-btn" id="cart-btn" title="Carrinho de compras">
+                <a th:href="@{cart/view}" class="cart-btn" id="cart-btn" title="Carrinho de compras">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count" id="cart-count">0</span>
+                    <span th:if="${shoppingCart}" th:text="${shoppingCart.getTotalQuantity()}" class="cart-count" id="cart-count"> - </span>
                 </a>
                 <div class="dropdown">
                     <button class="btn btn-outline dropdown-toggle" id="profile-dropdown">
@@ -66,9 +66,8 @@
         </div>
     </section>
 
-    <!-- Shopping Cart Section (hidden by default) -->
-    <!-- ⚠️ THYMELEAF: Remover style="display: none;" e adicionar th:if="${shoppingCartView != null}" -->
-    <section class="cart-section" style="display: none;" id="cart-section">
+    <!-- Shopping Cart Section -->
+    <section th:if="${loggedUser != null && shoppingCart.isOpen == true}" class="cart-section" id="cart-section">
         <div class="container">
             <div class="admin-card">
                 <div class="card-header">
@@ -82,15 +81,15 @@
                     <form class="form-grid three-columns">
                         <div class="form-group">
                             <label for="cart-user">Usuário</label>
-                            <input type="text" id="cart-user" value="João Silva" readonly>
+                            <input type="text" id="cart-user" th:value="|${loggedUser.firstName} ${loggedUser.lastName}|" readonly>
                         </div>
                         <div class="form-group">
                             <label for="cart-items">Total de Itens</label>
-                            <input type="text" id="cart-items" value="3" readonly>
+                            <input type="text" id="cart-items" th:value="${shoppingCart.getTotalQuantity()}" readonly>
                         </div>
                         <div class="form-group">
                             <label for="cart-total">Valor Total</label>
-                            <input type="text" id="cart-total" value="R$ 3.497,00" readonly>
+                            <input type="text" id="cart-total" th:value="'R$ ' + ${#numbers.formatDecimal(shoppingCart.getTotal(), 1, 2)}" readonly>
                         </div>
                     </form>
 
@@ -98,43 +97,37 @@
                     <div style="margin-top: 2rem;">
                         <table class="admin-table">
                             <thead>
-                                <tr>
-                                    <th>Produto</th>
-                                    <th>Preço Unitário</th>
-                                    <th>Quantidade</th>
-                                    <th>Subtotal</th>
-                                </tr>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Preço Unitário</th>
+                                <th>Quantidade</th>
+                                <th>Subtotal</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Smartphone Galaxy S21</td>
-                                    <td>R$ 1.299,00</td>
-                                    <td>1</td>
-                                    <td>R$ 1.299,00</td>
-                                </tr>
-                                <tr>
-                                    <td>Notebook Dell Inspiron</td>
-                                    <td>R$ 2.199,00</td>
-                                    <td>1</td>
-                                    <td>R$ 2.199,00</td>
-                                </tr>
+                            <tr th:each="item : ${shoppingCart.items}">
+                                <td th:text="${item.product.name}">Smartphone Galaxy S21</td>
+                                <td th:text="'R$ ' + ${#numbers.formatDecimal(item.product.price, 1, 2)}">R$ 1.299,00</td>
+                                <td th:text="${item.quantity}">1</td>
+                                <td th:text="'R$ ' + ${#numbers.formatDecimal(item.subTotal, 1, 2)}">R$ 00,00</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- Empty Cart Message (hidden by default) -->
-                    <!-- ⚠️ THYMELEAF: Remover style="display: none;" e adicionar th:if="${shoppingCartView == null or shoppingCartView.isEmpty()}" -->
-                    <div class="cart-empty" style="display: none;">
+                    <div th:if="${shoppingCart.size == 0}" class="cart-empty">
                         <i class="fas fa-shopping-cart" style="font-size: 64px; color: var(--text-secondary);"></i>
                         <p>Seu carrinho está vazio</p>
                     </div>
                 </div>
+
+                <!-- Action buttons -->
                 <div class="card-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
                     <div class="form-actions" style="gap: 1rem;">
-                        <a href="#produtos" class="btn btn-outline">
-                            <i class="fas fa-arrow-left"></i> Comprar Mais
+                        <a th:href= "@{/cart/view}" class="btn btn-danger">
+                            <i class="fas fa-arrow-left"></i> Fechar Carrinho
                         </a>
-                        <a href="checkout.html" class="btn btn-primary">
+                        <a th:if="${shoppingCart.size > 0}" href="checkout.html" class="btn btn-primary">
                             <i class="fas fa-check"></i> Finalizar Pedido
                         </a>
                     </div>
@@ -185,7 +178,7 @@
                             <button class="btn btn-outline btn-small" th:onclick="|viewProduct(${product.id})|"> <!-- substituição literal do thymeleaf (||) -->
                                 <i class="fas fa-eye"></i><br>Detalhe
                             </button>
-                            <a href="index.html?addToCart=1" class="btn btn-primary btn-small">
+                            <a th:href="@{/cart/add(productId=${product.id})}" class="btn btn-primary btn-small">
                                 <i class="fas fa-cart-plus"></i><br>Adicionar
                             </a>
                         </div>

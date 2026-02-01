@@ -32,6 +32,7 @@ public class LoginController {
     System.out.println("attempting to signin for: " + email + " - " + password);
     String errorMessage = "Usuário ou senha inválidos";
     String successMessage = "Usuário autenticado com sucesso!";
+
     // "Optional" porque a interface CrudRepository retorna um generics do tipo
     // Optional<T>para o metodo findById, então seguimos a mesma linha de pensamento
     Optional<User> search = userRepository.findByEmail(email);
@@ -40,15 +41,20 @@ public class LoginController {
       redirectAttributes.addFlashAttribute("error", errorMessage);
       return "redirect:/signin";
     }
+
     String userPass = search.get().getPassword();
     if(!userPass.equals(password)) {
       System.out.println(errorMessage);
       redirectAttributes.addFlashAttribute("error", errorMessage);
       return "redirect:/signin";
     }
+
     System.out.println(successMessage + " => " + search.get());
+
     redirectAttributes.addFlashAttribute("success", successMessage);
     session.setAttribute("loggedUser", search.get());
+    session.setAttribute("shoppingCart", new ShoppingCart());
+
     return "redirect:/";
   }
 
