@@ -19,17 +19,17 @@
                 <h1><i class="fas fa-shopping-bag"></i> E-commerce</h1>
             </div>
             <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#produtos">Produtos</a></li>
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/product}">Produtos</a></li>
             </ul>
             <div class="user-actions">
                 <a href="index.html" class="cart-btn" id="cart-btn" title="Carrinho de compras">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count" id="cart-count">0</span>
+                    <span th:text="${shoppingCart.totalQuantity}" class="cart-count" id="cart-count">-</span>
                 </a>
                 <div class="dropdown">
                     <button class="btn btn-outline dropdown-toggle" id="profile-dropdown">
-                        <i class="fas fa-user"></i> <span>Perfil</span> <i class="fas fa-chevron-down"></i>
+                        <i class="fas fa-user"></i> <span th:text="${loggedUser.firstName}">Perfil</span> <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="dropdown-menu" id="dropdown-menu">
                         <a href="signin.html" class="dropdown-item">
@@ -67,15 +67,15 @@
                     <form class="form-grid three-columns" style="margin-bottom: 2rem;">
                         <div class="form-group">
                             <label for="checkout-user">Usuário</label>
-                            <input type="text" id="checkout-user" value="João Silva" readonly>
+                            <input th:value="|${loggedUser.firstName} ${loggedUser.lastName}|" type="text" id="checkout-user" readonly>
                         </div>
                         <div class="form-group">
                             <label for="checkout-items">Total de Itens</label>
-                            <input type="text" id="checkout-items" value="2" readonly>
+                            <input th:value="${shoppingCart.getTotalQuantity()}" type="text" id="checkout-items" readonly>
                         </div>
                         <div class="form-group">
                             <label for="checkout-total">Valor Total</label>
-                            <input type="text" id="checkout-total" value="R$ 3.498,00" readonly>
+                            <input th:value="'R$ ' + ${#numbers.formatDecimal(shoppingCart.getTotal(), 1, 2)}" type="text" id="checkout-total" value="R$ 3.498,00" readonly>
                         </div>
                     </form>
 
@@ -105,26 +105,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Notebook Dell Inspiron</td>
-                                    <td>R$ 2.199,00</td>
-                                    <td>1</td>
-                                    <td>R$ 2.199,00</td>
-                                </tr>
-                                <tr>
-                                    <td>Smartphone Galaxy S21</td>
-                                    <td>R$ 1.299,00</td>
-                                    <td>1</td>
-                                    <td>R$ 1.299,00</td>
+                                <tr th:each="item : ${shoppingCart.items}">
+                                    <td th:text="${item.product.name}">Nome do item</td>
+                                    <td th:text="'R$ ' + ${#numbers.formatDecimal(item.product.price, 1, 2)}">R$ 00,00</td>
+                                    <td th:text="${item.quantity}">Qtd</td>
+                                    <td th:text="'R$ ' + ${#numbers.formatDecimal(item.subTotal, 1, 2)}">R$ 00,00</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="card-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
-                    <form action="order-success.html" method="POST" style="display: contents;">
+                    <form th:action="@{/order/success}" method="POST" style="display: contents;">
                         <div class="form-actions" style="gap: 1rem;">
-                            <a href="index.html" class="btn btn-outline">
+                            <a th:href="@{/}" class="btn btn-outline">
                                 <i class="fas fa-arrow-left"></i> Voltar ao Carrinho
                             </a>
                             <button type="submit" class="btn btn-primary">

@@ -58,7 +58,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="home">
+    <section th:if="${loggedUser == null || shoppingCart == null || !shoppingCart.isOpen}" class="hero" id="home">
         <div class="hero-container">
             <h2>A Sua Loja Online</h2>
             <p>Descubra produtos incríveis com os melhores preços e entrega rápida. Tecnologia e qualidade em um só lugar.</p>
@@ -67,7 +67,7 @@
     </section>
 
     <!-- Shopping Cart Section -->
-    <section th:if="${loggedUser != null && shoppingCart.isOpen == true}" class="cart-section" id="cart-section">
+    <section th:if="${loggedUser != null && shoppingCart != null && shoppingCart.isOpen == true}" class="cart-section" id="cart-section">
         <div class="container">
             <div class="admin-card">
                 <div class="card-header">
@@ -115,6 +115,7 @@
                         </table>
                     </div>
 
+                    <!-- Cart Empty -->
                     <div th:if="${shoppingCart.size == 0}" class="cart-empty">
                         <i class="fas fa-shopping-cart" style="font-size: 64px; color: var(--text-secondary);"></i>
                         <p>Seu carrinho está vazio</p>
@@ -127,7 +128,7 @@
                         <a th:href= "@{/cart/view}" class="btn btn-danger">
                             <i class="fas fa-arrow-left"></i> Fechar Carrinho
                         </a>
-                        <a th:if="${shoppingCart.size > 0}" href="checkout.html" class="btn btn-primary">
+                        <a th:if="${shoppingCart.size > 0}" th:href="@{/order/checkout}" class="btn btn-primary">
                             <i class="fas fa-check"></i> Finalizar Pedido
                         </a>
                     </div>
