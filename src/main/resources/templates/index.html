@@ -16,17 +16,19 @@
     <header class="header">
         <nav class="nav-container">
             <div class="logo">
-                <h1>
-                    <i class="fas fa-shopping-bag"></i> E-commerce
-                </h1>
+                <a th:href="@{/}" style="text-decoration: none; color: inherit;">
+                    <h1>
+                        <i class="fas fa-shopping-bag"></i> E-commerce
+                    </h1>
+                </a>
             </div>
             <ul class="nav-menu">
-                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/cart/close}">Home</a></li>
                 <li><a href="#produtos">Produtos</a></li>
                 <li><a th:href="@{/order}">Meus Pedidos</a></li>
             </ul>
             <div class="user-actions">
-                <a th:href="@{cart/view}" class="cart-btn" id="cart-btn" title="Carrinho de compras">
+                <a th:href="@{cart/open}" class="cart-btn" id="cart-btn" title="Carrinho de compras">
                     <i class="fas fa-shopping-cart"></i>
                     <span th:if="${shoppingCart}" th:text="${shoppingCart.getTotalQuantity()}" class="cart-count" id="cart-count"> - </span>
                 </a>
@@ -37,10 +39,10 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="dropdown-menu" id="dropdown-menu">
-                        <a th:href="@{/signin}" class="dropdown-item">
+                        <a th:if="${loggedUser == null}" th:href="@{/signin}" class="dropdown-item">
                             <i class="fas fa-sign-in-alt"></i> Fazer Login
                         </a>
-                        <a th:href="@{/signup}" class="dropdown-item">
+                        <a th:if="${loggedUser == null}" th:href="@{/signup}" class="dropdown-item">
                             <i class="fas fa-user-plus"></i> Criar Conta
                         </a>
                         <hr class="dropdown-divider">
@@ -125,7 +127,7 @@
                 <!-- Action buttons -->
                 <div class="card-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
                     <div class="form-actions" style="gap: 1rem;">
-                        <a th:href= "@{/cart/view}" class="btn btn-danger">
+                        <a th:href= "@{/cart/close}" class="btn btn-danger">
                             <i class="fas fa-arrow-left"></i> Fechar Carrinho
                         </a>
                         <a th:if="${shoppingCart.size > 0}" th:href="@{/order/checkout}" class="btn btn-primary">

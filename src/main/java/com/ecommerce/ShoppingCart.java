@@ -1,10 +1,12 @@
 package com.ecommerce;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 
 @Getter
+@Setter
 public class ShoppingCart {
     // Usa Map em vez de List para evitar produtos duplicados no carrinho.
     // Chave: ID do produto (Long) | Valor: CartItem (produto + quantidade)
@@ -17,10 +19,6 @@ public class ShoppingCart {
     public ShoppingCart() {
         items = new HashMap<>();
         isOpen = false;
-    }
-
-    public void toggleView() {
-        isOpen = !isOpen;
     }
 
     public void addProduct(Product item) {

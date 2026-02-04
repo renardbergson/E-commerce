@@ -17,34 +17,36 @@
     <header class="header">
         <nav class="nav-container">
             <div class="logo">
-                <h1><i class="fas fa-shopping-bag"></i> E-commerce</h1>
+                <a th:href="@{/cart/close}" style="text-decoration: none; color: inherit;">
+                    <h1><i class="fas fa-shopping-bag"></i> E-commerce</h1>
+                </a>
             </div>
             <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#produtos">Produtos</a></li>
+                <li><a th:href="@{/cart/close}">Home</a></li>
+                <li><a th:href="@{/products}">Produtos</a></li>
             </ul>
             <div class="user-actions">
-                <a href="index.html" class="cart-btn" id="cart-btn" title="Carrinho de compras">
+                <a th:href="@{/cart/open}" class="cart-btn" id="cart-btn" title="Carrinho de compras">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count" id="cart-count">0</span>
+                    <span class="cart-count" id="cart-count"> 0 </span>
                 </a>
                 <div class="dropdown">
                     <button class="btn btn-outline dropdown-toggle" id="profile-dropdown">
-                        <i class="fas fa-user"></i> <span>Perfil</span> <i class="fas fa-chevron-down"></i>
+                        <i class="fas fa-user"></i> <span th:text="${session.loggedUser.firstName}">Nome Usuário</span> <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="dropdown-menu" id="dropdown-menu">
-                        <a href="signin.html" class="dropdown-item">
+                        <a th:if="${session.loggedUser == null}" th:href="@{/signin}" class="dropdown-item">
                             <i class="fas fa-sign-in-alt"></i> Fazer Login
                         </a>
-                        <a href="signup.html" class="dropdown-item">
+                        <a th:if="${session.loggedUser == null}" th:href="@{/signup}" class="dropdown-item">
                             <i class="fas fa-user-plus"></i> Criar Conta
                         </a>
                         <hr class="dropdown-divider">
-                        <a href="admin.html" class="dropdown-item">
+                        <a th:href="@{/admin}" class="dropdown-item">
                             <i class="fas fa-cogs"></i> Área Administrativa
                         </a>
                         <hr class="dropdown-divider">
-                        <a href="index.html" class="dropdown-item">
+                        <a th:href="@{/logout}" class="dropdown-item">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     </div>
@@ -54,7 +56,7 @@
     </header>
 
     <!-- Success Section -->
-    <section class="cart-section">
+    <section th:if="${order != null}" class="cart-section">
         <div class="container">
             <div class="admin-card">
                 <div class="card-header">
@@ -78,10 +80,10 @@
                                 Você receberá um email com o <strong>QR Code PIX</strong> para realizar o pagamento.
                             </p>
                             <p class="success-alert-text">
-                                Verifique sua caixa de entrada em: <strong>usuario@email.com</strong>
+                                Verifique sua caixa de entrada em: <strong th:text="${order.user.email}">email@dousuario.com</strong>
                             </p>
                             <div class="order-id-badge">
-                                <i class="fas fa-receipt"></i> Pedido #<span>12345</span>
+                                <i class="fas fa-receipt"></i> Pedido #<span th:text="${order.orderNumber}">######</span>
                             </div>
                         </div>
                     </div>
@@ -101,7 +103,7 @@
                 </div>
                 <div class="card-footer" style="display: flex; justify-content: center; padding-bottom: 2rem;">
                     <div class="form-actions" style="gap: 1rem;">
-                        <a href="index.html" class="btn btn-primary">
+                        <a th:href="@{/cart/close}" class="btn btn-primary">
                             <i class="fas fa-home"></i> Voltar à Home
                         </a>
                     </div>

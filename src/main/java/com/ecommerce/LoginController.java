@@ -52,7 +52,6 @@ public class LoginController {
 
     redirectAttributes.addFlashAttribute("success", successMessage);
     session.setAttribute("loggedUser", search.get());
-    session.setAttribute("shoppingCart", new ShoppingCart());
 
     return "redirect:/";
   }
@@ -65,7 +64,7 @@ public class LoginController {
 
   @GetMapping("/logout")
   public String logout(HttpSession session) {
-    session.invalidate();
+    session.invalidate(); // destrói a sessão inteira: carrinho, usuário logado, etc.
     System.out.println("User logged out successfully!");
     return "redirect:/";
   }

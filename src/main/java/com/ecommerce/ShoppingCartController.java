@@ -35,21 +35,40 @@ public class ShoppingCartController {
         Product product = search.get();
 
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        if(cart == null) {
+            cart = new ShoppingCart();
+            session.setAttribute("shoppingCart", cart);
+        }
         cart.addProduct(product);
         cart.printItems();
 
         return "redirect:/";
     }
 
-    @GetMapping("/view")
-    public String view(HttpSession session, Model model) {
+    @GetMapping("/open")
+    public String view(HttpSession session) {
         if(session.getAttribute("loggedUser") == null) {
             return "redirect:/signin";
         }
 
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
-        cart.toggleView();
+        if(cart == null) {
+            cart = new ShoppingCart();
+            session.setAttribute("shoppingCart", cart);
+        }
+        cart.setOpen(true);
 
+        return "redirect:/";
+    }
+
+    @GetMapping("/close")
+    public String close(HttpSession session) {
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        if(cart == null) {
+            cart = new ShoppingCart();
+            session.setAttribute("shoppingCart", cart);
+        }
+        cart.setOpen(false);
         return "redirect:/";
     }
 }
