@@ -10,49 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/styles.css}" href="../static/css/styles.css">
     <link rel="stylesheet" th:href="@{/css/admin.css}" href="../static/css/admin.css">
+    <link rel="stylesheet" th:href="@{/css/auth.css}" href="../static/css/auth.css">
 </head>
 <body>
     <!-- Header -->
-    <header class="header">
-        <nav class="nav-container">
-            <div class="logo">
-                <a th:href="@{/cart/close}" style="text-decoration: none; color: inherit;">
-                    <h1><i class="fas fa-shopping-bag"></i> E-commerce</h1>
-                </a>
-            </div>
-            <ul class="nav-menu">
-                <li><a th:href="@{/cart/close}">Home</a></li>
-                <li><a th:href="@{/product}">Produtos</a></li>
-            </ul>
-            <div class="user-actions">
-                <a th:href="@{/cart/open}" class="cart-btn" id="cart-btn" title="Carrinho de compras">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span th:text="${session.shoppingCart.totalQuantity}" class="cart-count" id="cart-count">-</span>
-                </a>
-                <div class="dropdown">
-                    <button class="btn btn-outline dropdown-toggle" id="profile-dropdown">
-                        <i class="fas fa-user"></i> <span th:text="${session.loggedUser.firstName}">Perfil</span> <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-menu" id="dropdown-menu">
-                        <a th:if="${session.loggedUser == null}" th:href="@{/signin}" class="dropdown-item">
-                            <i class="fas fa-sign-in-alt"></i> Fazer Login
-                        </a>
-                        <a th:if="${session.loggedUser == null}" th:href="@{/signup}" class="dropdown-item">
-                            <i class="fas fa-user-plus"></i> Criar Conta
-                        </a>
-                        <hr class="dropdown-divider">
-                        <a th:href="@{/admin}" class="dropdown-item">
-                            <i class="fas fa-cogs"></i> Área Administrativa
-                        </a>
-                        <hr class="dropdown-divider">
-                        <a th:href="@{/logout}" class="dropdown-item">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <header th:replace="fragments/header :: header"></header>
 
     <!-- Checkout Section -->
     <section class="cart-section">

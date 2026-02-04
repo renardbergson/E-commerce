@@ -54,8 +54,8 @@ public class ShoppingCartController {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         if(cart == null) {
             cart = new ShoppingCart();
-            session.setAttribute("shoppingCart", cart);
         }
+        session.setAttribute("shoppingCart", cart);
         cart.setOpen(true);
 
         return "redirect:/";
@@ -66,8 +66,8 @@ public class ShoppingCartController {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         if(cart == null) {
             cart = new ShoppingCart();
-            session.setAttribute("shoppingCart", cart);
         }
+        session.setAttribute("shoppingCart", cart);
         cart.setOpen(false);
         return "redirect:/";
     }
