@@ -22,6 +22,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Enumerated(EnumType.STRING)
+    private Role role;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private String firstName;
     private String lastName;
@@ -47,6 +49,18 @@ public class User {
         private final String description;
 
         Status(String description) {
+            this.description = description;
+        }
+    }
+
+    @Getter
+    public enum Role {
+        ADMIN("Administrador"),
+        CUSTOMER("Cliente");
+
+        private final String description;
+
+        Role(String description) {
             this.description = description;
         }
     }

@@ -17,7 +17,11 @@ public class OrderController {
   OrderRepository orderRepository;
 
   @GetMapping("")
-  public String product(Model model) {
+  public String product(Model model, HttpSession session) {
+    if(session.getAttribute("loggedUser") == null) {
+      return "redirect:/signin";
+    }
+
     model.addAttribute("adminSection", "order");
     return "admin";
   }

@@ -20,7 +20,7 @@
                 <a th:href="@{/}">
                     <h1><i class="fas fa-shopping-bag"></i> E-commerce</h1>
                 </a>
-                <span class="admin-badge">Admin</span>
+                <span th:if="${session.loggedUser.role.name() == 'ADMIN'}" class="admin-badge">Admin</span>
             </div>
             <div class="admin-user-actions">
                 <button class="theme-toggle" id="theme-toggle" title="Alternar tema">
@@ -28,7 +28,7 @@
                 </button>
                 <div class="admin-user-info">
                     <i class="fas fa-user-shield"></i>
-                    <span>João Silva</span>
+                    <span th:text="${session.loggedUser != null ? session.loggedUser.firstName : 'Usuário'}"></span>
                 </div>
                 <a th:href="@{/cart/close}" class="btn btn-outline btn-small">
                     <i class="fas fa-arrow-left"></i> Voltar ao Site
@@ -44,12 +44,12 @@
             <nav class="admin-nav">
                 <ul class="admin-nav-list">
                     <li class="admin-nav-item">
-                        <a th:href="@{/dashboard}" th:classappend="${adminSection == 'dashboard'} ? ' active' : ''" class="admin-nav-link" data-section="dashboard">
+                        <a th:if="${session.loggedUser.role.name() == 'ADMIN'}" th:href="@{/dashboard}" th:classappend="${adminSection == 'dashboard'} ? ' active' : ''" class="admin-nav-link" data-section="dashboard">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="admin-nav-item">
+                    <li th:if="${session.loggedUser.role.name() == 'ADMIN'}" class="admin-nav-item">
                         <a th:href="@{/product}" th:classappend="${adminSection == 'product'} ? ' active' : ''" class="admin-nav-link" data-section="product">
                             <i class="fas fa-box"></i>
                             <span>Produtos</span>
@@ -61,7 +61,7 @@
                             <span>Pedidos</span>
                         </a>
                     </li>
-                    <li class="admin-nav-item">
+                    <li th:if="${session.loggedUser.role.name() == 'ADMIN'}" class="admin-nav-item">
                         <a th:href="@{/user}" th:classappend="${adminSection == 'user'} ? ' active' : ''" class="admin-nav-link" data-section="user">
                             <i class="fas fa-users"></i>
                             <span>Usuários</span>
@@ -74,7 +74,7 @@
         <!-- Main Content -->
         <main class="admin-main">
             <!-- Dashboard Section -->
-            <section th:if="${adminSection == 'dashboard'}" id="dashboard-section" class="admin-section">
+            <section th:if="${session.loggedUser.role.name() == 'ADMIN' && adminSection == 'dashboard'}" id="dashboard-section" class="admin-section">
                 <div class="admin-header-section">
                     <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
                     <p>Visão geral do sistema</p>
@@ -184,9 +184,12 @@
             </section>
 
             <!-- Produtos Section -->
-            <section th:if="${adminSection == 'product'}" id="produtos-section" class="admin-section">
+            <section th:if="${session.loggedUser.role.name() == 'ADMIN' && adminSection == 'product'}" id="produtos-section" class="admin-section">
                 <div class="admin-header-section">
-                    <h2><i class="fas fa-box"></i> Gestão de Produtos</h2>
+                    <h2>
+                        <i class="fas fa-box"></i>
+                        Gestão de Produtos
+                    </h2>
                     <a th:href="@{/product}" class="btn btn-primary" id="add-produto-btn">
                         <i class="fas fa-plus"></i> Adicionar Produto
                     </a>
@@ -299,13 +302,18 @@
             <!-- Pedidos Section -->
             <section th:if="${adminSection == 'order'}" id="pedidos-section" class="admin-section">
                 <div class="admin-header-section">
-                    <h2><i class="fas fa-shopping-cart"></i> Gestão de Pedidos</h2>
+                    <h2>
+                        <i class="fas fa-shopping-cart"></i>
+                        <span th:text="${session.loggedUser.role.name() == 'ADMIN' ? 'Gestão de Pedidos' : 'Meus Pedidos'}">
+                            Gestão de Pedidos
+                        </span>
+                    </h2>
                 </div>
 
                 <!-- Filters -->
                 <div class="admin-filters">
                     <div class="filter-group">
-                        <input type="text" id="search-pedidos" placeholder="Buscar por cliente ou pedido..." class="admin-input">
+                        <input th:if="${session.loggedUser.role.name() == 'ADMIN'}" type="text" id="search-pedidos" placeholder="Buscar por cliente ou pedido..." class="admin-input">
                         <select id="filter-status-pedido" class="admin-select" onchange="window.location.href = 'admin.html' + (this.value ? '?status=' + encodeURIComponent(this.value) : '')">
                             <option value="" selected>Todos os Status</option>
                             <option value="PENDING">Pendente</option>
@@ -381,7 +389,7 @@
             </section>
 
             <!-- Usuários Section -->
-            <section th:if="${adminSection == 'user'}" id="usuarios-section" class="admin-section">
+            <section th:if="${session.loggedUser.role.name() == 'ADMIN' && adminSection == 'user'}" id="usuarios-section" class="admin-section">
                 <div class="admin-header-section">
                     <h2><i class="fas fa-users"></i> Gestão de Usuários</h2>
                     <a href="admin.html" class="btn btn-primary" id="add-usuario-btn">
@@ -489,6 +497,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Nome</th>
+                                <th>Papel</th>
                                 <th>E-mail</th>
                                 <th>Telefone</th>
                                 <th>Status</th>
@@ -500,6 +509,7 @@
                             <tr th:each="user : ${users}">
                                 <td th:text="${user.id}">Id</td>
                                 <td th:text="|${user.firstName} ${user.lastName}|">Nome do usuário</td>
+                                <td th:text="${user.role.description}">Papel</td>
                                 <td th:text="${user.email}">email@email.com</td>
                                 <td th:text="${user.phone}">(00) 00000-0000</td>
                                 <td th:text="${user.status.description}">STATUS</td>

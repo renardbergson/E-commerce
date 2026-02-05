@@ -34,11 +34,9 @@
                     <a th:if="${session.loggedUser == null}" th:href="@{/signup}" class="dropdown-item">
                         <i class="fas fa-user-plus"></i> Criar Conta
                     </a>
-                    <hr class="dropdown-divider">
-                    <a th:if="${session.loggedUser != null}" th:href="@{/admin}" class="dropdown-item">
+                    <a th:if="${session.loggedUser != null && session.loggedUser.role.name() == 'ADMIN'}" th:href="@{/admin}" class="dropdown-item">
                         <i class="fas fa-cogs"></i> Área Administrativa
                     </a>
-                    <hr class="dropdown-divider">
                     <a th:href="@{/logout}" class="dropdown-item">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>

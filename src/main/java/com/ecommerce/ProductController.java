@@ -1,5 +1,6 @@
 package com.ecommerce;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,15 @@ public class ProductController {
   private ProductRepository productRepository;
 
   @GetMapping("/product")
-  public String product(Model model, @RequestParam(required = false) ProductCategory categoryFilter) {
+  public String product(
+          Model model,
+          @RequestParam(required = false) ProductCategory categoryFilter,
+          HttpSession session
+  ) {
+    if(session.getAttribute("loggedUser") == null) {
+      return "redirect:/signin";
+    }
+
     if(!model.containsAttribute("adminSection")) {
       model.addAttribute("adminSection", "product");
     }

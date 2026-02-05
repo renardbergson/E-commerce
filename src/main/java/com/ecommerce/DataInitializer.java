@@ -75,9 +75,9 @@ public class DataInitializer implements CommandLineRunner {
 
         userRepository.saveAll(
                 List.of(
-                        insertUser("Renard", "Bergson", "renard.contato@gmail.com", "(83)98141-3123", "Fl@010892", true, User.Status.ACTIVE),
-                        insertUser("Esdras", "Medeiros", "esdras.contato@gmail.com", "(83)00000-0000", "Fl@010892", true, User.Status.INACTIVE),
-                        insertUser("Asriel", "Lucas", "asriel.contato@gmail.com", "(83)00000-0000", "Fl@010892", true, User.Status.SUSPENDED)
+                        insertUser(User.Role.ADMIN, "Renard", "Bergson", "renard.contato@gmail.com", "(83)98141-3123", "Fl@010892", true, User.Status.ACTIVE),
+                        insertUser(User.Role.CUSTOMER,"Esdras", "Medeiros", "esdras.contato@gmail.com", "(83)00000-0000", "Fl@010892", true, User.Status.INACTIVE),
+                        insertUser(User.Role.CUSTOMER,"Asriel", "Lucas", "asriel.contato@gmail.com", "(83)00000-0000", "Fl@010892", true, User.Status.SUSPENDED)
                 )
         );
     }
@@ -92,8 +92,9 @@ public class DataInitializer implements CommandLineRunner {
         return product;
     }
 
-    private User insertUser(String firstName, String lastName, String email, String phone, String password, Boolean newsletter, User.Status status) {
+    private User insertUser(User.Role role, String firstName, String lastName, String email, String phone, String password, Boolean newsletter, User.Status status) {
         User user = new User();
+        user.setRole(role);
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);

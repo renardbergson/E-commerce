@@ -1,5 +1,6 @@
 package com.ecommerce;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,22 +15,34 @@ public class UserController {
   private UserRepository userRepository;
 
   @GetMapping("/user")
-  public String dashboard(Model model, @RequestParam(required = false) User.Status statusFilter) {
+  public String dashboard(
+          Model model,
+          @RequestParam(required = false) User.Status statusFilter,
+          HttpSession session
+  ) {
+    if(session.getAttribute("loggedUser") == null) {
+      return "redirect:/signin";
+    }
+
     if(!model.containsAttribute("adminSection")) {
       model.addAttribute("adminSection", "user");
     }
+
     if(!model.containsAttribute("user")) {
       model.addAttribute("user", new User());
     }
+
     Iterable<User> users;
     if(statusFilter != null) {
       users = userRepository.findByStatus(statusFilter);
     } else {
       users = userRepository.findAll();
     }
+
     model.addAttribute("users", users);
     model.addAttribute("userStatusList", User.Status.values());
     model.addAttribute("statusFilter", statusFilter != null ? statusFilter.name() : "ALL");
+
     return "admin";
   }
 
