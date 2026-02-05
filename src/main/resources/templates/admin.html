@@ -314,18 +314,19 @@
                 <div class="admin-filters">
                     <div class="filter-group">
                         <input th:if="${session.loggedUser.role.name() == 'ADMIN'}" type="text" id="search-pedidos" placeholder="Buscar por cliente ou pedido..." class="admin-input">
-                        <select id="filter-status-pedido" class="admin-select" onchange="window.location.href = 'admin.html' + (this.value ? '?status=' + encodeURIComponent(this.value) : '')">
-                            <option value="" selected>Todos os Status</option>
-                            <option value="PENDING">Pendente</option>
-                            <option value="CONFIRMED">Confirmado</option>
-                            <option value="PAID">Pago</option>
-                            <option value="SHIPPED">Enviado</option>
-                            <option value="DELIVERED">Entregue</option>
-                            <option value="CANCELLED">Cancelado</option>
+                        <select id="filter-status-pedido" class="admin-select" onchange="window.location.href = this.value ? `/order?statusFilter=${encodeURIComponent(this.value)}` : '/order'">
+                            <option value="" th:selected="${statusFilter == 'ALL'}">Todos os Status</option>
+                            <option
+                                    th:each="status : ${orderStatuses}"
+                                    th:value="${status}"
+                                    th:selected="${statusFilter == status}"
+                                    th:text="${status.description}"
+                            ></option>
                         </select>
                     </div>
                 </div>
 
+                <!-- Orders Table -->
                 <div class="admin-table-container">
                     <table class="admin-table" id="pedidos-table">
                         <thead>
@@ -336,47 +337,24 @@
                                 <th>Valor Total</th>
                                 <th>Status</th>
                                 <th>Pagamento</th>
-                                <th>Data</th>
+                                <th>Data e Hora</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="pedidos-tbody">
-                            <tr>
-                                <td>125</td>
-                                <td>Maria Santos</td>
-                                <td>3</td>
-                                <td>R$ 450,00</td>
-                                <td>Entregue</td>
-                                <td>Cartão de Crédito</td>
-                                <td>15/03/2025 14:30</td>
-                                <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-view" title="Ver Detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
+                            <tr th:if="${orders == null || orders.isEmpty()}">
+                                <td colspan="8">
+                                    <p>Seus pedidos realizados aparecerão aqui.</p>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>124</td>
-                                <td>Carlos Oliveira</td>
-                                <td>5</td>
-                                <td>R$ 1.200,00</td>
-                                <td>Em Transporte</td>
-                                <td>PIX</td>
-                                <td>18/03/2025 10:15</td>
-                                <td class="action-buttons">
-                                    <a href="admin.html" class="btn-icon btn-view" title="Ver Detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>123</td>
-                                <td>Ana Costa</td>
-                                <td>2</td>
-                                <td>R$ 320,00</td>
-                                <td>Cancelado</td>
-                                <td>Boleto</td>
-                                <td>20/03/2025 16:45</td>
+                            <tr th:each="order : ${orders}">
+                                <td th:text="${order.orderNumber}">Número do pedido</td>
+                                <td th:text="${order.user.firstName}">Nome do cliente</td>
+                                <td th:text="${order.totalItems}">Total de itens</td>
+                                <td th:text="'R$ ' + ${#numbers.formatDecimal(order.totalValue, 1, 2)}">R$ 00,00</td>
+                                <td th:text="${order.status.description}">Status do pedido</td>
+                                <td th:text="${order.paymentMethod}">Forma de pagamento</td>
+                                <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')+' hrs'}">00/00/0000 00:00</td>
                                 <td class="action-buttons">
                                     <a href="admin.html" class="btn-icon btn-view" title="Ver Detalhes">
                                         <i class="fas fa-eye"></i>

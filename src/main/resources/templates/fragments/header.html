@@ -12,9 +12,15 @@
             </a>
         </div>
         <ul class="nav-menu">
-            <li><a th:href="@{/cart/close}">Home</a></li>
-            <li><a href="#produtos">Produtos</a></li>
-            <li><a th:href="@{/order}">Meus Pedidos</a></li>
+            <li>
+                <a th:href="@{/cart/close}">Home</a>
+            </li>
+            <li>
+                <a href="#produtos">Produtos</a>
+            </li>
+            <li>
+                <a th:text="${session.loggedUser != null && session.loggedUser.role.name() == 'ADMIN' ? 'Gerenciar Pedidos' : 'Pedidos'}" th:href="@{/order}">Pedidos</a>
+            </li>
         </ul>
         <div class="user-actions">
             <a th:href="@{/cart/open}" class="cart-btn" id="cart-btn" title="Carrinho de compras">

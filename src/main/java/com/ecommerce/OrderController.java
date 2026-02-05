@@ -8,7 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/order")
@@ -16,13 +19,35 @@ public class OrderController {
   @Autowired
   OrderRepository orderRepository;
 
+  // "/order"
   @GetMapping("")
-  public String product(Model model, HttpSession session) {
-    if(session.getAttribute("loggedUser") == null) {
+  public String product(Model model, HttpSession session, @RequestParam(required = false) Order.OrderStatus statusFilter) {
+    User loggedUser = (User) session.getAttribute("loggedUser");
+
+    if(loggedUser == null) {
       return "redirect:/signin";
     }
 
+    // Separa os pedidos pelo nível de acesso do usuário
+    List<Order> orders;
+    if(loggedUser.getRole() == User.Role.ADMIN) {
+      orders = (List<Order>) orderRepository.findAll();
+    } else {
+      orders = orderRepository.findByUserId(loggedUser.getId());
+    }
+
+    // Aplica o filtro de status, se houver
+    if(statusFilter != null) {
+      orders = orders.stream()
+              .filter(order -> order.getStatus() == statusFilter)
+              .toList();
+    }
+
     model.addAttribute("adminSection", "order");
+    model.addAttribute("orders", orders);
+    model.addAttribute("orderStatuses", Order.OrderStatus.values());
+    model.addAttribute("statusFilter", statusFilter != null ? statusFilter : "ALL");
+
     return "admin";
   }
 

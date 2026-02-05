@@ -14,7 +14,6 @@ import java.util.UUID;
 @Table(name = "orders")
 @Getter
 @Setter
-@ToString
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
